@@ -14,7 +14,7 @@ def sdkVersion = 26
 
 android {
     compileSdkVersion sdkVersion
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -34,10 +34,10 @@ android {
 }
 
 dependencies {
-    compile 'commons-net:commons-net:3.6'
+    implementation 'commons-net:commons-net:3.6'
     //compile "net.gotev:uploadservice:${version}"
     //comment the previous line and uncomment the next line for development (it uses the local lib)
-    compile project(':uploadservice')
+    implementation project(':uploadservice')
 }
 
 Properties properties = new Properties()

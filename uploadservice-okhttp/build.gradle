@@ -14,7 +14,7 @@ def sdkVersion = 27
 
 android {
     compileSdkVersion sdkVersion
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -34,10 +34,10 @@ android {
 }
 
 dependencies {
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     //compile "net.gotev:uploadservice:${version}"
     //comment the previous line and uncomment the next line for development (it uses the local lib)
-    compile project(':android-upload-service:uploadservice')
+    implementation project(':uploadservice')
 }
 
 Properties properties = new Properties()

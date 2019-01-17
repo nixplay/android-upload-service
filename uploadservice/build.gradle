@@ -14,7 +14,7 @@ def sdkVersion = 27
 
 android {
     compileSdkVersion sdkVersion
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -36,8 +36,8 @@ android {
 def supportLibraryVersion = "27.0.2"
 
 dependencies {
-    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    compile "com.android.support:support-v4:${supportLibraryVersion}"
+    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    implementation "com.android.support:support-v4:${supportLibraryVersion}"
 }
 
 // add the following information to the file: local.properties situated in the parent directory of

@@ -45,7 +45,7 @@ public class BaseActivity extends AppCompatActivity {
         UploadNotificationConfig config = new UploadNotificationConfig();
 
         PendingIntent clickIntent = PendingIntent.getActivity(
-                this, 1, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                this, 1, new Intent(this, MainActivity.class), PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         config.setTitleForAllStatuses(getString(title))
                 .setRingToneEnabled(true)

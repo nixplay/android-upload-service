@@ -387,7 +387,7 @@ public final class UploadService extends Service {
         }
 
         if (uploadId.equals(foregroundUploadId)) {
-            startForeground(UPLOAD_NOTIFICATION_BASE_ID, notification);
+            startForeground(UPLOAD_NOTIFICATION_BASE_ID, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC);
             return true;
         }
 

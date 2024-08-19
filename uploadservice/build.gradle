@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+// apply plugin: 'com.jfrog.bintray'
+apply plugin: "com.novoda.bintray-release"
+
 
 def siteUrl = 'https://github.com/gotev/android-upload-service'
 def gitUrl = 'https://github.com/gotev/android-upload-service.git'
@@ -85,23 +87,34 @@ install {
     }
 }
 
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = projectName
-        desc = projectDesc
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        issueTrackerUrl = siteUrl + "/issues/"
-        licenses = ["Apache-2.0"]
-        labels = ['android', 'upload', 'service', 'library', 'background', 'notification']
-        publicDownloadNumbers = true
-        publish = true
-    }
+publish {
+    userOrg = "nixplay"
+    groupId = "net.gotev.uploadservice"
+    artifactId = "android-upload-service"
+    publishVersion = "$publishVersionName"
+    desc = "android upload service"
+    licences = ["Apache-2.0"]
+    uploadName = "android-upload-service"
+    website = "https://github.com/nixplay/android-upload-service.git"
 }
+
+// bintray {
+//     user = properties.getProperty("bintray.user")
+//     key = properties.getProperty("bintray.apikey")
+//     configurations = ['archives']
+//     pkg {
+//         repo = "maven"
+//         name = projectName
+//         desc = projectDesc
+//         websiteUrl = siteUrl
+//         vcsUrl = gitUrl
+//         issueTrackerUrl = siteUrl + "/issues/"
+//         licenses = ["Apache-2.0"]
+//         labels = ['android', 'upload', 'service', 'library', 'background', 'notification']
+//         publicDownloadNumbers = true
+//         publish = true
+//     }
+// }
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs

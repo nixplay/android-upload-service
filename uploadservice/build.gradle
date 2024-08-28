@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.novoda.bintray-release'
 
 def siteUrl = 'https://github.com/gotev/android-upload-service'
 def gitUrl = 'https://github.com/gotev/android-upload-service.git'
@@ -8,9 +8,19 @@ def projectName = "android-upload-service"
 def projectDesc = "Easily upload files in the background with automatic Android Notification Center progress indication."
 def projectGroup = "net.gotev"
 group = projectGroup
-version = "3.4.2"
+version = "3.4.3"
 
 def sdkVersion = 31
+
+buildscript {
+    repositories {
+        jcenter()
+
+    }
+    dependencies {
+        classpath "com.novoda:bintray-release:0.9"
+    }
+}
 
 android {
     compileSdkVersion sdkVersion
@@ -85,23 +95,34 @@ install {
     }
 }
 
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = projectName
-        desc = projectDesc
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        issueTrackerUrl = siteUrl + "/issues/"
-        licenses = ["Apache-2.0"]
-        labels = ['android', 'upload', 'service', 'library', 'background', 'notification']
-        publicDownloadNumbers = true
-        publish = true
-    }
+publish {
+    userOrg = "nixplay"
+    groupId = "com.github.nixplay"
+    artifactId = "uploadservice"
+    publishVersion = "$publishVersionName"
+    desc = "zhihu Matisse fork"
+    licences = ["Apache-2.0"]
+    uploadName = "UploadService"
+    website = siteUrl
 }
+
+// bintray {
+//     user = properties.getProperty("bintray.user")
+//     key = properties.getProperty("bintray.apikey")
+//     configurations = ['archives']
+//     pkg {
+//         repo = "maven"
+//         name = projectName
+//         desc = projectDesc
+//         websiteUrl = siteUrl
+//         vcsUrl = gitUrl
+//         issueTrackerUrl = siteUrl + "/issues/"
+//         licenses = ["Apache-2.0"]
+//         labels = ['android', 'upload', 'service', 'library', 'background', 'notification']
+//         publicDownloadNumbers = true
+//         publish = true
+//     }
+// }
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs

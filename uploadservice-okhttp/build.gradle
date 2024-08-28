@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 def siteUrl = 'https://github.com/gotev/android-upload-service'
 def gitUrl = 'https://github.com/gotev/android-upload-service.git'
 def projectName = "android-upload-service-okhttp"
 def projectDesc = "OkHttp stack implementation for Android Upload Service."
 def projectGroup = "net.gotev"
-group = projectGroup
-version = "3.4.2"
+def group = projectGroup
+def publishVersionName = "3.4.3"
 
 def sdkVersion = 27
 
@@ -20,7 +20,7 @@ android {
         minSdkVersion 14
         targetSdkVersion sdkVersion
         versionCode 14
-        versionName version
+        versionName publishVersionName
     }
     buildTypes {
         release {
@@ -45,85 +45,40 @@ if (project.rootProject.file("local.properties").exists()) {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 }
 
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            name projectName
-            description projectDesc
-            packaging 'aar'
-            groupId projectGroup
-            version version
-            url siteUrl
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                }
-            }
-            developers {
-                developer {
-                    id 'gotev'
-                    name 'Aleksandar Gotev'
-                }
-            }
-            scm {
-                connection gitUrl
-                developerConnection gitUrl
-                url siteUrl
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompileProvider.get().classpath
+        }
+    }
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
 
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+
+afterEvaluate {
+    publishing{
+        publications{
+            release(MavenPublication){
+                groupId = group
+                artifactId = projectName
+                version = publishVersionName
+                // Adds javadocs and sources as separate jars.
+                artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
+                artifact androidSourcesJar
+                artifact androidJavadocsJar
             }
         }
     }
-}
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = projectName
-        desc = projectDesc
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        issueTrackerUrl = siteUrl + "/issues/"
-        licenses = ["Apache-2.0"]
-        labels = ['android', 'upload', 'service', 'okhttp', 'stack']
-        publicDownloadNumbers = true
-        publish = true
-    }
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    title = "Android Upload Service OkHttp Stack implementation for version $project.version"
-    description "Generates Javadoc"
-    source = android.sourceSets.main.java.srcDirs
-    classpath += files(android.bootClasspath)
-    exclude '**/BuildConfig.java', '**/R.java'
-    options {
-        addStringOption('Xdoclint:none')
-        windowTitle("Android Upload Service OkHttp Stack implementation for version $project.version")
-        locale = 'en_US'
-        encoding = 'UTF-8'
-        charSet = 'UTF-8'
-        links("http://docs.oracle.com/javase/7/docs/api/")
-        linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference")
-        setMemberLevel(JavadocMemberLevel.PUBLIC)
-    }
-    failOnError false
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
 }

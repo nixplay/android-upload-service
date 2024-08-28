@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 def siteUrl = 'https://github.com/gotev/android-upload-service'
 def gitUrl = 'https://github.com/gotev/android-upload-service.git'
@@ -8,10 +8,15 @@ def projectName = "android-upload-service"
 def projectDesc = "Easily upload files in the background with automatic Android Notification Center progress indication."
 def projectGroup = "net.gotev"
 group = projectGroup
-version = "3.4.2"
+publishVersionName = "3.4.3"
 
 def sdkVersion = 31
+buildscript {
+    repositories {
+        jcenter()
 
+    }
+}
 android {
     compileSdkVersion sdkVersion
     buildToolsVersion '28.0.3'
@@ -20,7 +25,7 @@ android {
         minSdkVersion 24
         targetSdkVersion sdkVersion
         versionCode 30
-        versionName version
+        versionName publishVersionName
     }
     buildTypes {
         release {
@@ -36,6 +41,8 @@ android {
 def supportLibraryVersion = "27.0.2"
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
     implementation "com.android.support:support-v4:${supportLibraryVersion}"
     implementation 'androidx.work:work-runtime-ktx:2.7.0'
@@ -52,55 +59,6 @@ dependencies {
 Properties properties = new Properties()
 if (project.rootProject.file("local.properties").exists()) {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
-}
-
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            name projectName
-            description projectDesc
-            packaging 'aar'
-            groupId projectGroup
-            version version
-            url siteUrl
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                }
-            }
-            developers {
-                developer {
-                    id 'gotev'
-                    name 'Aleksandar Gotev'
-                }
-            }
-            scm {
-                connection gitUrl
-                developerConnection gitUrl
-                url siteUrl
-
-            }
-        }
-    }
-}
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = projectName
-        desc = projectDesc
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        issueTrackerUrl = siteUrl + "/issues/"
-        licenses = ["Apache-2.0"]
-        labels = ['android', 'upload', 'service', 'library', 'background', 'notification']
-        publicDownloadNumbers = true
-        publish = true
-    }
 }
 
 task sourcesJar(type: Jar) {
@@ -133,4 +91,18 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives javadocJar
     archives sourcesJar
+}
+
+afterEvaluate {
+    publishing{
+        publications{
+            release(MavenPublication){
+                groupId = group
+                artifactId = projectName
+                version = publishVersionName
+                // Adds javadocs and sources as separate jars.
+                artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
+            }
+        }
+    }
 }

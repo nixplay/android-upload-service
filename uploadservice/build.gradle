@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 def siteUrl = 'https://github.com/gotev/android-upload-service'
 def gitUrl = 'https://github.com/gotev/android-upload-service.git'
@@ -8,7 +7,7 @@ def projectName = "android-upload-service"
 def projectDesc = "Easily upload files in the background with automatic Android Notification Center progress indication."
 def projectGroup = "net.gotev"
 group = projectGroup
-version = "3.4.2"
+version = "3.4.3"
 
 def sdkVersion = 31
 
@@ -85,22 +84,15 @@ install {
     }
 }
 
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = projectName
-        desc = projectDesc
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        issueTrackerUrl = siteUrl + "/issues/"
-        licenses = ["Apache-2.0"]
-        labels = ['android', 'upload', 'service', 'library', 'background', 'notification']
-        publicDownloadNumbers = true
-        publish = true
-    }
+publish {
+    userOrg = group
+    groupId = "net.gotev.uploadservice"
+    artifactId = "android-upload-service"
+    publishVersion = "$publishVersionName"
+    desc = projectDesc
+    licences = ["Apache-2.0"]
+    uploadName = "android-upload-service"
+    website = gitUrl
 }
 
 task sourcesJar(type: Jar) {

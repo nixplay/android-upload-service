@@ -8,7 +8,7 @@ def projectName = "android-upload-service-ftp"
 def projectDesc = "FTP Upload implementation for Android Upload Service."
 def projectGroup = "net.gotev"
 group = projectGroup
-version = "3.4.2"
+version = "3.4.3"
 
 def sdkVersion = 26
 

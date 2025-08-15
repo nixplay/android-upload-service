@@ -41,8 +41,8 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 
     // Google support libraries
-    compile "com.android.support:appcompat-v7:${supportVersion}"
-    compile "com.android.support:design:${supportVersion}"
+    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation "com.google.android.material:material:1.0.0"
 
     // ButterKnife
     compile "com.jakewharton:butterknife:${butterKnifeVersion}"

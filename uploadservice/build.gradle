@@ -8,7 +8,7 @@ def projectName = "android-upload-service"
 def projectDesc = "Easily upload files in the background with automatic Android Notification Center progress indication."
 def projectGroup = "net.gotev"
 def group = projectGroup
-def publishVersionName = "3.4.3"
+def publishVersionName = "3.4.5"
 
 def sdkVersion = 31
 buildscript {
@@ -25,6 +25,7 @@ android {
         targetSdkVersion sdkVersion
         versionCode 30
         versionName publishVersionName
+        consumerProguardFiles 'proguard-rules.pro'
     }
     buildTypes {
         release {

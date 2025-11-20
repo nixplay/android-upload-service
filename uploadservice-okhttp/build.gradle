@@ -8,7 +8,7 @@ def projectName = "android-upload-service-okhttp"
 def projectDesc = "OkHttp stack implementation for Android Upload Service."
 def projectGroup = "net.gotev"
 def group = projectGroup
-def publishVersionName = "3.4.3"
+def publishVersionName = "3.4.5"
 
 def sdkVersion = 27
 
@@ -21,6 +21,7 @@ android {
         targetSdkVersion sdkVersion
         versionCode 14
         versionName publishVersionName
+        consumerProguardFiles 'proguard-rules.pro'
     }
     buildTypes {
         release {
